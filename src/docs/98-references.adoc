@@ -1,0 +1,11 @@
+[appendix]
+== References
+
+[bibliography]
+- [[[RFC-7231]]], *Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content*, _R. Fielding, Ed.
+(Adobe) and J. Reschke, Ed. (greenbytes)_, June 2014, Internet Engineering Task Force (IETF),
+  https://tools.ietf.org/html/rfc7231
+- [[[LGPL3]]], *GNU LESSER GENERAL PUBLIC LICENSE, Version 3*, 2007-06-29, Free Software Foundation,
+  https://www.gnu.org/licenses/lgpl-3.0.de.html
+- [[[CC-BY-SA]]], *Creative Commons Attribution-ShareAlike 4.0 International Public License*, Creative Commons,
+  https://creativecommons.org/licenses/by-sa/4.0/legalcode.de

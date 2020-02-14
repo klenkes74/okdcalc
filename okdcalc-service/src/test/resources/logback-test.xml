@@ -1,0 +1,107 @@
+<!--
+  ~ Copyright (c) 2020  Kaiserpfalz EDV-Service, Roland T. Lichti.
+  ~
+  ~ This is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--
+     This is the testing configuration. For every level of OPERATIONS and 
+     BUSINESS log there is an own logfile to check if all logging that should
+     go in one of the levels is really there.
+       Frameworks get logged into DEVELOPMENT.
+  -->
+<configuration debug="false">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%X{tenant}][%X{correlation}] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DEVELOPMENT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./target/development.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./target/development.%d.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
+            <maxHistory>28</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%X{test}][%X{id}] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="BUSINESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <file>./target/business.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./target/business.%d.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
+            <maxHistory>28</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="OPERATIONS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <file>./target/operations.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./target/operations.%d.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
+            <maxHistory>28</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %-5level [%X{test}][%X{id}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="business" level="TRACE" additivity="false"><!-- Level filtering is done in Appender -->
+        <appender-ref ref="BUSINESS"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="operations" level="TRACE" additivity="false"><!-- Level filtering is done in Appender -->
+        <appender-ref ref="OPERATIONS"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="ch.qos.logback" level="WARN" additivity="false">
+        <appender-ref ref="DEVELOPMENT"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.jmock" level="DEBUG" additivity="false">
+        <appender-ref ref="DEVELOPMENT"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="de.kaiserpfalzedv" level="TRACE" additivity="false">
+        <appender-ref ref="DEVELOPMENT"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <root level="WARN">
+        <appender-ref ref="DEVELOPMENT"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

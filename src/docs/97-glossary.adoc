@@ -1,0 +1,5 @@
+[appendix]
+== Glossary
+
+[glossary]
+OKD(((OKD)))[[OKD]]:: The open source kubernetes distribution that is the base for OpenShift.

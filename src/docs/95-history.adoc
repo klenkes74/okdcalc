@@ -1,0 +1,14 @@
+[appendix]
+== History of this document
+
+[cols="10%,20%,<30%,<~",options="header"]
+|===
+| Version
+| Date
+| Author
+| Description
+
+| 0.1.0 | 2020-02-14 | Roland T. Lichti
+| Initial documentation
+
+|===

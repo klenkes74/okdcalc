@@ -1,0 +1,8 @@
+[appendix]
+== Legalese
+
+The OKDCalc source code is licensed under the well known GNU Lesser Public License 3 <<LGPL3>>.
+Some libraries we use have other licenses.
+The documentation is licensed as Creative Commons Attribution-ShareAlike 4.0 International <<CC-BY-SA>>.
+Within Germany the official German translations as given in chapter <<References>> are binding.
+Outside of Germany the English text of the licenses are the binding ones.

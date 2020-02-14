@@ -1,0 +1,24 @@
+= OKDCalc - Sizing calculator for OKD
+Roland T. Lichti <rlichti@kaiserpfalz-edv.de>
+1.0.0-SNAPSHOT, 2020-02-14
+:doctype: book
+:pdf-page-size: A4
+:pdf-page-layout: portrait
+:sectnums:
+:sectnumlevels: 4
+:listing-caption: Listing
+:table-caption: Table
+:appendix-caption: Appendix
+:toc: left
+
+include::01-main.adoc[]
+
+include::95-history.adoc[]
+
+include::96-legalese.adoc[]
+
+include::97-glossary.adoc[]
+
+include::98-references.adoc[]
+
+ifdef::backend-pdf[include::99-index.adoc[leveloffset=+1]]
