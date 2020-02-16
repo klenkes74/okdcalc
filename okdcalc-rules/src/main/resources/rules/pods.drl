@@ -1,0 +1,23 @@
+package de.kaiserpfalzedv.okdcalc;
+
+import de.kaiserpfalzedv.okdcalc.facts.MutableSizingResult;
+
+rule "MaxPods"
+    dialect "java"
+when
+    $sizing : MutableSizingResult(podsPerNode > 250)
+then
+    $sizing.setPodsPerNode(250);
+    update($sizing);
+end
+
+rule "CalculateMemoryPods"
+    dialect "java"
+when
+    $sizing : MutableSizingResult(podsPerNode == 0 || podsPerNode == 250)
+then
+    int pods = $sizing.getPodsPerNode();
+    int memoryPods = $sizing.getFreeMemory() / $sizing.getDefaultPod().getMemory();
+    int cpuPods = $sizing.getFreeCPU() / $sizing.getDefaultPod().getMilliCores();
+
+end

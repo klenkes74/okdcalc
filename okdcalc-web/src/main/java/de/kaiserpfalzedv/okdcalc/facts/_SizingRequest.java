@@ -15,25 +15,38 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.okdcalc;
+package de.kaiserpfalzedv.okdcalc.facts;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.okdcalc.Immutable;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.immutables.value.Value;
+
+import java.util.Set;
 
 /**
  * @author rlichti
- * @version 1.0.0 2020-02-14
- * @since 1.0.0 2020-02-14
+ * @version 1.0.0 2020-02-16
+ * @since 1.0.0 2020-02-16
  */
 @Immutable
-@Value.Modifiable
-@JsonSerialize(as = CPU.class)
-@JsonDeserialize(builder = CPU.Builder.class)
-public interface _CPU {
-    int getSockets();
+@JsonSerialize(as = SizingRequest.class)
+@JsonDeserialize(builder = SizingRequest.Builder.class)
+@RegisterForReflection
+public interface _SizingRequest {
+    int getTotalNumberOfPods();
 
-    int getCores();
+    _Pod getDefaultPod();
 
-    int getLogical();
+    Set<_NodeDefinition> getNodeDefinitions();
+
+    @Value.Default
+    default _OkdVersion getVersion() {
+        return OkdVersion.builder()
+                .major(3)
+                .minor(11)
+                .patchlevel(0)
+                .build();
+    }
 }

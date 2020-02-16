@@ -1,0 +1,33 @@
+package de.kaiserpfalzedv.okdcalc;
+
+import de.kaiserpfalzedv.okdcalc.facts.MutableSizingResult;
+
+rule "MaxPods"
+    dialect "mvel"
+    no-loop false
+    lock-on-active true
+    salience 10
+when
+    $sizing : MutableSizingResult(podsPerNode > 250)
+then
+    $sizing.setPodsPerNode(250);
+end
+
+rule "CalculateMemory"
+    dialect "mvel"
+    salience 1000
+when
+    sizing : MutableSizingResult()
+then
+    sizing.setPodsPerNode(sizing.getNodeSizing().getMemory() / sizing.getDefaultPod().getMemory());
+end
+
+rule "CalculateCPU"
+when
+    pod : MutablePod()
+    cpu : MutableCPU()
+    sizing : MutableNodeSizing()
+    $pods : cpu.getLogical() * 1000 / pod.getMilliCores()
+then
+
+end

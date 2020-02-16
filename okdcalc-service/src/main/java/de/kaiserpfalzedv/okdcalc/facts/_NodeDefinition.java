@@ -15,10 +15,11 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.okdcalc;
+package de.kaiserpfalzedv.okdcalc.facts;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.okdcalc.Immutable;
 import org.immutables.value.Value;
 
 /**
@@ -28,12 +29,37 @@ import org.immutables.value.Value;
  */
 @Immutable
 @Value.Modifiable
-@JsonSerialize(as = NodeSizing.class)
-@JsonDeserialize(builder = NodeSizing.Builder.class)
-public interface _NodeSizing {
+@JsonSerialize(as = NodeDefinition.class)
+@JsonDeserialize(builder = NodeDefinition.Builder.class)
+public interface _NodeDefinition {
     long getMemory();
 
-    CPU getCPU();
+    CPU getCpu();
 
     long getDisk();
+
+    @Value.Default
+    default int getPodsPerCore() {
+        return 10;
+    }
+
+    @Value.Default
+    default int getMaxPods() {
+        return getPodsPerCore() * getCpu().getLogical();
+    }
+
+    @Value.Default
+    default long getMillicores() {
+        return getCpu().getLogical() * 1000L;
+    }
+
+    /**
+     * The score of this node type.
+     *
+     * @return the score of this node.
+     */
+    @Value.Default
+    default long getScore() {
+        return 1000L;
+    }
 }

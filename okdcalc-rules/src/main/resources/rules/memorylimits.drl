@@ -1,0 +1,47 @@
+package de.kaiserpfalzedv.okdcalc;
+    dialect "java"
+
+import de.kaiserpfalzedv.okdcalc.facts.MutableSizingResult;
+import de.kaiserpfalzedv.okdcalc.facts.MutableNodeDefinition;
+import de.kaiserpfalzedv.okdcalc.facts.MutableCPU;
+import de.kaiserpfalzedv.okdcalc.facts.MutablePod;
+import de.kaiserpfalzedv.okdcalc.facts._SizingResult;
+import de.kaiserpfalzedv.okdcalc.facts._NodeDefinition;
+import de.kaiserpfalzedv.okdcalc.facts._CPU;
+import de.kaiserpfalzedv.okdcalc.facts._Pod;
+import de.kaiserpfalzedv.okdcalc.facts.SizingResult;
+import de.kaiserpfalzedv.okdcalc.facts.NodeDefinition;
+import de.kaiserpfalzedv.okdcalc.facts.CPU;
+import de.kaiserpfalzedv.okdcalc.facts.Pod;
+
+global MutableSizingResult sizing;
+
+rule "CalculateMemory"
+    dialect "mvel"
+when
+    $sizing : MutableSizingResult()
+then
+    $sizing.setPodsPerNode($sizing.getFreeMemory() / $sizing.getDefaultPod().getMemory());
+
+    update($sizing);
+end
+
+rule "CalculateReservedSystemMemory"
+    dialect "mvel"
+when
+    $sizing : MutableSizingResult()
+then
+    $sizing.setSystemMemory(5 * 1024 * 1024 * $sizing.getPodsPerNode());
+
+    update($sizing);
+end
+
+rule "CalculateReservedKubeletMemory"
+    dialect "mvel"
+when
+    $sizing : MutableSizingResult()
+then
+    $sizing.setKubeletMemory(5 * 1024 * 1024 * $sizing.getPodsPerNode());
+
+    update($sizing);
+end

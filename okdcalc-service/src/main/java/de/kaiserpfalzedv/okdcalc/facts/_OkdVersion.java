@@ -15,18 +15,28 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.kaiserpfalzedv.okdcalc;
+package de.kaiserpfalzedv.okdcalc.facts;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import de.kaiserpfalzedv.okdcalc.Immutable;
+
+import java.util.Optional;
 
 /**
  * @author rlichti
- * @version 1.0.0 2020-02-14
- * @since 1.0.0 2020-02-14
+ * @version 1.0.0 2020-02-16
+ * @since 1.0.0 2020-02-16
  */
-public class NodeCalculator {
-    private static final Logger LOG = LoggerFactory.getLogger(NodeCalculator.class);
+@Immutable
+@JsonSerialize(as = OkdVersion.class)
+@JsonDeserialize(builder = OkdVersion.Builder.class)
+public interface _OkdVersion {
+    int getMajor();
 
+    int getMinor();
 
+    int getPatchlevel();
+
+    Optional<String> getSuffix();
 }
