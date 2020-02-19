@@ -20,7 +20,6 @@ package de.kaiserpfalzedv.okdcalc.facts;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.kaiserpfalzedv.okdcalc.Immutable;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.immutables.value.Value;
 
 import java.util.Set;
@@ -31,10 +30,9 @@ import java.util.Set;
  * @since 1.0.0 2020-02-16
  */
 @Immutable
-@JsonSerialize(as = SizingRequest.class)
-@JsonDeserialize(builder = SizingRequest.Builder.class)
-@RegisterForReflection
-public interface _SizingRequest {
+@JsonSerialize(as = ClusterSizingRequest.class)
+@JsonDeserialize(builder = ClusterSizingRequest.Builder.class)
+public interface _ClusterSizingRequest {
     int getTotalNumberOfPods();
 
     _Pod getDefaultPod();

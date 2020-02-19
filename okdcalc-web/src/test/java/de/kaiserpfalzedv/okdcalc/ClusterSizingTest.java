@@ -18,9 +18,9 @@
 package de.kaiserpfalzedv.okdcalc;
 
 import de.kaiserpfalzedv.okdcalc.facts.CPU;
+import de.kaiserpfalzedv.okdcalc.facts.ClusterSizingRequest;
 import de.kaiserpfalzedv.okdcalc.facts.NodeDefinition;
 import de.kaiserpfalzedv.okdcalc.facts.Pod;
-import de.kaiserpfalzedv.okdcalc.facts.SizingRequest;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Tag;
@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static de.kaiserpfalzedv.okdcalc.facts._ClusterSizingResult.GiB;
 import static io.restassured.RestAssured.given;
 
 /**
@@ -54,7 +55,9 @@ public class ClusterSizingTest {
                             .logical(16)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(4096 * GiB)
+            .diskBandwidth(3 * GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 64 * 1024 * 1024 * 1024)
             .podsPerCore(10)
             .build();
@@ -67,7 +70,9 @@ public class ClusterSizingTest {
                             .logical(64)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(4096 * GiB)
+            .diskBandwidth(3 * GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 256 * 1024 * 1024 * 1024)
             .podsPerCore(10)
             .score(5000L)
@@ -81,7 +86,9 @@ public class ClusterSizingTest {
                             .logical(2)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(4096 * GiB)
+            .diskBandwidth(3 * GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 2 * 1024 * 1024 * 1024)
             .podsPerCore(10)
             .score(200L)
@@ -94,7 +101,7 @@ public class ClusterSizingTest {
                 .when()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .body(SizingRequest.builder()
+                .body(ClusterSizingRequest.builder()
                               .totalNumberOfPods(250)
                               .defaultPod(NORMAL_POD)
                               .addNodeDefinitions(

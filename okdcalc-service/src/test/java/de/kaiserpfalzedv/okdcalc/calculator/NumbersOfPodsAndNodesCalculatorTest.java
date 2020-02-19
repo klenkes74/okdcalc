@@ -18,14 +18,16 @@
 package de.kaiserpfalzedv.okdcalc.calculator;
 
 import de.kaiserpfalzedv.okdcalc.facts.CPU;
+import de.kaiserpfalzedv.okdcalc.facts.ClusterSizingResult;
 import de.kaiserpfalzedv.okdcalc.facts.NodeDefinition;
 import de.kaiserpfalzedv.okdcalc.facts.Pod;
-import de.kaiserpfalzedv.okdcalc.facts.SizingResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static de.kaiserpfalzedv.okdcalc.facts._ClusterSizingResult.GiB;
 
 /**
  * @author rlichti
@@ -63,7 +65,9 @@ public class NumbersOfPodsAndNodesCalculatorTest {
                             .logical(16)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(2048 * GiB)
+            .diskBandwidth(GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 64 * 1024 * 1024 * 1024)
             .podsPerCore(10)
             .build();
@@ -76,7 +80,9 @@ public class NumbersOfPodsAndNodesCalculatorTest {
                             .logical(64)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(2048 * GiB)
+            .diskBandwidth(GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 256 * 1024 * 1024 * 1024)
             .podsPerCore(10)
             .build();
@@ -89,7 +95,9 @@ public class NumbersOfPodsAndNodesCalculatorTest {
                             .logical(2)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(2048 * GiB)
+            .diskBandwidth(GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 2 * 1024 * 1024)
             .podsPerCore(10)
             .build();
@@ -97,17 +105,26 @@ public class NumbersOfPodsAndNodesCalculatorTest {
     private NumbersOfPodsAndNodesCalculator service;
 
     @Test
-    public void shouldReturn2NodesWith145PodsWhen250SmallPodsAreGiven() throws NoSolutionException {
-        SizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(250, SMALL_POD, DEFAULT_NODE);
+    public void shouldReturn2NodesWith140PodsWhen250SmallPodsAreGiven() throws NoSolutionException {
+        ClusterSizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(250, SMALL_POD, DEFAULT_NODE);
         LOG.debug("Result: {}", result);
 
-        assert result.getPodsPerNode() == 145;
+        assert result.getPodsPerNode() == 140;
         assert result.getNodes() == 2;
     }
 
     @Test
-    public void shouldReturn32NodesWith250PodsWhen8000NormalPodsAndBigNodesAreGiven() throws NoSolutionException {
-        SizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(8000, NORMAL_POD, BIG_NODES);
+    public void shouldReturn58NodesWith140PodsWhen8000NormalPodsAndBigNodesAreGiven() throws NoSolutionException {
+        ClusterSizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(8000, NORMAL_POD, BIG_NODES);
+        LOG.debug("Result: {}", result);
+
+        assert result.getPodsPerNode() == 140;
+        assert result.getNodes() == 58;
+    }
+
+    @Test
+    public void shouldReturn32NodesWith250PodsWhen8000NormalPodsAndBigNodesAndNoLoggingAreGiven() throws NoSolutionException {
+        ClusterSizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(8000, NORMAL_POD.withNumberOfLoggingEventsPerSecond(0), BIG_NODES);
         LOG.debug("Result: {}", result);
 
         assert result.getPodsPerNode() == 250;
@@ -117,7 +134,7 @@ public class NumbersOfPodsAndNodesCalculatorTest {
     @Test
     public void shouldThrowNoSolutionExceptionWhenNotEnoughMemoryPerNodeIsGiven() {
         try {
-            SizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(10, BIG_PODS_MEMORY, SMALL_NODES);
+            ClusterSizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(10, BIG_PODS_MEMORY, SMALL_NODES);
             LOG.debug("Result: {}", result);
             Assertions.fail("A NoSolutionException should have been thrown!");
         } catch (NoSolutionException e) {
@@ -128,7 +145,7 @@ public class NumbersOfPodsAndNodesCalculatorTest {
     @Test
     public void shouldThrowNoSolutionExceptionWhenNotEnoughCPUPerNodeIsGiven() {
         try {
-            SizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(10, BIG_PODS_CPU, SMALL_NODES);
+            ClusterSizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(10, BIG_PODS_CPU, SMALL_NODES);
             LOG.debug("Result: {}", result);
             Assertions.fail("A NoSolutionException should have been thrown!");
         } catch (NoSolutionException e) {
@@ -139,7 +156,7 @@ public class NumbersOfPodsAndNodesCalculatorTest {
     @Test
     public void shouldThrowNoSolutionExceptionWhenTooManyNodesWouldBeUsed() {
         try {
-            SizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(100000000, NORMAL_POD, DEFAULT_NODE);
+            ClusterSizingResult result = service.calculateNumberOfPodsPerNodeAndNumberOfNodes(100000000, NORMAL_POD, DEFAULT_NODE);
             LOG.debug("Result: {}", result);
             Assertions.fail("A NoSolutionException should have been thrown!");
         } catch (NoSolutionException e) {

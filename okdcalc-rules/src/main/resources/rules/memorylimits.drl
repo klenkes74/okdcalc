@@ -1,15 +1,15 @@
 package de.kaiserpfalzedv.okdcalc;
     dialect "java"
 
-import de.kaiserpfalzedv.okdcalc.facts.MutableSizingResult;
+import de.kaiserpfalzedv.okdcalc.facts.MutableClusterSizingResult;
 import de.kaiserpfalzedv.okdcalc.facts.MutableNodeDefinition;
 import de.kaiserpfalzedv.okdcalc.facts.MutableCPU;
 import de.kaiserpfalzedv.okdcalc.facts.MutablePod;
-import de.kaiserpfalzedv.okdcalc.facts._SizingResult;
+import de.kaiserpfalzedv.okdcalc.facts._ClusterSizingResult;
 import de.kaiserpfalzedv.okdcalc.facts._NodeDefinition;
 import de.kaiserpfalzedv.okdcalc.facts._CPU;
 import de.kaiserpfalzedv.okdcalc.facts._Pod;
-import de.kaiserpfalzedv.okdcalc.facts.SizingResult;
+import de.kaiserpfalzedv.okdcalc.facts.ClusterSizingResult;
 import de.kaiserpfalzedv.okdcalc.facts.NodeDefinition;
 import de.kaiserpfalzedv.okdcalc.facts.CPU;
 import de.kaiserpfalzedv.okdcalc.facts.Pod;

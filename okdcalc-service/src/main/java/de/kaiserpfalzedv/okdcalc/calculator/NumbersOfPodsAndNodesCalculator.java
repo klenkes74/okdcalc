@@ -17,7 +17,7 @@
 
 package de.kaiserpfalzedv.okdcalc.calculator;
 
-import de.kaiserpfalzedv.okdcalc.facts.SizingResult;
+import de.kaiserpfalzedv.okdcalc.facts.ClusterSizingResult;
 import de.kaiserpfalzedv.okdcalc.facts._NodeDefinition;
 import de.kaiserpfalzedv.okdcalc.facts._Pod;
 import org.slf4j.Logger;
@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
 
-import static de.kaiserpfalzedv.okdcalc.facts._SizingResult.RESERVED_BYTES_PER_POD;
-import static de.kaiserpfalzedv.okdcalc.facts._SizingResult.RESERVED_MILLICORE_PER_POD;
+import static de.kaiserpfalzedv.okdcalc.facts._ClusterSizingResult.RESERVED_BYTES_PER_POD;
+import static de.kaiserpfalzedv.okdcalc.facts._ClusterSizingResult.RESERVED_MILLICORE_PER_POD;
 
 /**
  * This calculator delivers the number of pods per nodes and number of nodes
@@ -40,11 +40,13 @@ import static de.kaiserpfalzedv.okdcalc.facts._SizingResult.RESERVED_MILLICORE_P
 public class NumbersOfPodsAndNodesCalculator {
     private static final Logger LOG = LoggerFactory.getLogger(NumbersOfPodsAndNodesCalculator.class);
 
+    /**
+     * The maximum number of compute nodes of a cluster.
+     */
     private static final int MAX_NODES_PER_CLUSTER = 2000;
-    private static final int MAX_PODS_PER_NODE = 250;
 
 
-    public SizingResult calculateNumberOfPodsPerNodeAndNumberOfNodes(
+    public ClusterSizingResult calculateNumberOfPodsPerNodeAndNumberOfNodes(
             final int totalNumberOfPods,
             final _Pod defaultPod,
             final _NodeDefinition nodeDefintion
@@ -52,7 +54,7 @@ public class NumbersOfPodsAndNodesCalculator {
         int podsPerNode = calcuatePodsPerNode(defaultPod, nodeDefintion);
         int numberOfNodes = calculateNumberOfNodes(podsPerNode, totalNumberOfPods);
 
-        return SizingResult.builder()
+        return ClusterSizingResult.builder()
                 .podsPerNode(podsPerNode)
                 .nodes(numberOfNodes)
                 .defaultPod(defaultPod)
@@ -75,10 +77,14 @@ public class NumbersOfPodsAndNodesCalculator {
 
         long podsForMemory = getPodsForMemory(defaultPod, nodeDefinition);
         long podsForCpu = calculatePodsLimitedByCpu(defaultPod, nodeDefinition);
-        int result = (int) Math.min(podsForCpu, podsForMemory);
-        int maxPodsPerNode = Math.min(MAX_PODS_PER_NODE, nodeDefinition.getMaxPods());
+        long podsForLoggingEvents = calculatePodsLimitedByLogEvents(defaultPod, nodeDefinition);
+        int result = (int) Math.min(Math.min(Math.min(podsForCpu, podsForMemory), podsForLoggingEvents), nodeDefinition.getMaxPods());
 
-        return Math.min(result, maxPodsPerNode);
+        LOG.debug(
+                "Max pods per node: result={}, memory={}, cpu={}, logging={}, node={}",
+                result, podsForMemory, podsForCpu, podsForLoggingEvents, nodeDefinition.getMaxPods()
+        );
+        return result;
     }
 
     private long getPodsForMemory(
@@ -115,6 +121,14 @@ public class NumbersOfPodsAndNodesCalculator {
 
         LOG.debug("Needed {} iteration(s) for cpu usage calculation: pods={}", subtractPod, podsForCpu);
         return podsForCpu;
+    }
+
+    private int calculatePodsLimitedByLogEvents(final _Pod defaultPod, final _NodeDefinition nodeDefinition) {
+        int result = (int) Math.ceil((double) nodeDefinition.getLoggingEventsPerSecondLimit()
+                                             / defaultPod.getNumberOfLoggingEventsPerSecond());
+
+        LOG.debug("Logging (fluentd) limit: pod={}, logevents={}", result, result * defaultPod.getNumberOfLoggingEventsPerSecond());
+        return result;
     }
 
     private int calculateNumberOfNodes(final int podsPerNode, final int totalNumberOfPods) throws NoSolutionException {

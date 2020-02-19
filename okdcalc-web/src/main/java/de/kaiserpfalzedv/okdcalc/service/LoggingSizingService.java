@@ -17,9 +17,9 @@
 
 package de.kaiserpfalzedv.okdcalc.service;
 
-import de.kaiserpfalzedv.okdcalc.calculator.NodeTypeCalculator;
-import de.kaiserpfalzedv.okdcalc.facts.ClusterSizingResult;
-import de.kaiserpfalzedv.okdcalc.facts._ClusterSizingRequest;
+import de.kaiserpfalzedv.okdcalc.calculator.LoggingClusterSizeCalculator;
+import de.kaiserpfalzedv.okdcalc.facts.LoggingSizingResult;
+import de.kaiserpfalzedv.okdcalc.facts._LoggingSizingRequest;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
@@ -33,25 +33,25 @@ import javax.ws.rs.core.MediaType;
 import java.util.Set;
 
 /**
+ * Calculates the size of the logging cluster according to the
+ * {@link de.kaiserpfalzedv.okdcalc.facts.LoggingEvent}s to be processed by the
+ * cluster.
+ *
  * @author rlichti
  * @version 1.0.0 2020-02-16
  * @since 1.0.0 2020-02-16
  */
-@Path("/cluster")
+@Path("/logging")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ClusterSizingService {
+public class LoggingSizingService {
     @Inject
-    NodeTypeCalculator calculator;
+    LoggingClusterSizeCalculator calculator;
 
-    @Counted(name = "performedClusterSizings", description = "How many cluster sizings were calculated.")
-    @Timed(name = "clusterSizingTimer", description = "A measure of how long it takes to perform the cluster sizing.", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "performedLoggingSizings", description = "How many logging cluster sizings were calculated.")
+    @Timed(name = "loggingSizingTimer", description = "A measure of how long it takes to perform the logging cluster sizing.", unit = MetricUnits.MILLISECONDS)
     @POST
-    public Set<ClusterSizingResult> calculateSingleNodeType(_ClusterSizingRequest request) {
-        return calculator.scoreNodetypes(
-                request.getTotalNumberOfPods(),
-                request.getDefaultPod(),
-                request.getNodeDefinitions()
-        );
+    public Set<LoggingSizingResult> calculateSingleNodeType(_LoggingSizingRequest request) {
+        return calculator.scoreNodetypes(request);
     }
 }

@@ -18,9 +18,9 @@
 package de.kaiserpfalzedv.okdcalc.calculator;
 
 import de.kaiserpfalzedv.okdcalc.facts.CPU;
+import de.kaiserpfalzedv.okdcalc.facts.ClusterSizingResult;
 import de.kaiserpfalzedv.okdcalc.facts.NodeDefinition;
 import de.kaiserpfalzedv.okdcalc.facts.Pod;
-import de.kaiserpfalzedv.okdcalc.facts.SizingResult;
 import de.kaiserpfalzedv.okdcalc.facts._NodeDefinition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static de.kaiserpfalzedv.okdcalc.facts._ClusterSizingResult.GiB;
 
 /**
  * @author rlichti
@@ -52,7 +54,9 @@ public class NodeTypeCalculatorTest {
                             .logical(16)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(2048 * GiB)
+            .diskBandwidth(GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 64 * 1024 * 1024 * 1024)
             .podsPerCore(10)
             .build();
@@ -65,7 +69,9 @@ public class NodeTypeCalculatorTest {
                             .logical(64)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(2048 * GiB)
+            .diskBandwidth(GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 256 * 1024 * 1024 * 1024)
             .podsPerCore(10)
             .score(5000L)
@@ -79,7 +85,9 @@ public class NodeTypeCalculatorTest {
                             .logical(2)
                             .build()
             )
-            .disk((long) 1024 * 1024 * 1024 * 1024)
+            .disk(2048 * GiB)
+            .diskBandwidth(GiB)
+            .maxNumberOfLoggingDisks(8)
             .memory((long) 2 * 1024 * 1024 * 1024)
             .podsPerCore(10)
             .score(200L)
@@ -94,13 +102,19 @@ public class NodeTypeCalculatorTest {
         nodeTypes.add(DEFAULT_NODE);
         nodeTypes.add(BIG_NODES);
 
-        Set<SizingResult> result = service.scoreNodetypes(250, NORMAL_POD, nodeTypes);
-        LOG.debug("Result: {}", result);
+        Set<ClusterSizingResult> result = service.scoreNodetypes(250, NORMAL_POD, nodeTypes);
+        LOG.trace("Result: {}", result);
 
-        assert result.size() == 3;
-        assert result.toArray(new SizingResult[0])[0].getScore() == 14 * 200L;
-        assert result.toArray(new SizingResult[0])[1].getScore() == 2 * 1000L;
-        assert result.toArray(new SizingResult[0])[2].getScore() == 5000L;
+        HashSet<Long> scorings = new HashSet<>(result.size());
+        for (ClusterSizingResult r : result) {
+            scorings.add(r.getScore());
+        }
+        LOG.debug("Scoring (smaller is better): {}", scorings);
+
+        assert scorings.size() == 3;
+        assert scorings.contains(2 * 1000L);
+        assert scorings.contains(2 * 5000L);
+        assert scorings.contains(14 * 200L);
     }
 
     @Test
@@ -110,12 +124,12 @@ public class NodeTypeCalculatorTest {
         nodeTypes.add(DEFAULT_NODE);
         nodeTypes.add(BIG_NODES);
 
-        Set<SizingResult> result = service.scoreNodetypes(250, NORMAL_POD.withMilliCores(3000L), nodeTypes);
+        Set<ClusterSizingResult> result = service.scoreNodetypes(250, NORMAL_POD.withMilliCores(3000L), nodeTypes);
         LOG.debug("Result: {}", result);
 
         assert result.size() == 2;
-        assert result.toArray(new SizingResult[0])[0].getScore() == 50 * 1000L;
-        assert result.toArray(new SizingResult[0])[1].getScore() == 12 * 5000L;
+        assert result.toArray(new ClusterSizingResult[0])[0].getScore() == 50 * 1000L;
+        assert result.toArray(new ClusterSizingResult[0])[1].getScore() == 12 * 5000L;
     }
 
     @Test

@@ -335,29 +335,6 @@
                             <java.util.logging.manager>org.apache.log4j.LogManager</java.util.logging.manager>
                         </systemProperties>
                     </configuration>
-
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.junit.jupiter</groupId>
-                            <artifactId>junit-jupiter-api</artifactId>
-                            <version>5.6.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.junit.jupiter</groupId>
-                            <artifactId>junit-jupiter-engine</artifactId>
-                            <version>5.6.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.junit.platform</groupId>
-                            <artifactId>junit-platform-launcher</artifactId>
-                            <version>1.6.0</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.hamcrest</groupId>
-                            <artifactId>hamcrest</artifactId>
-                            <version>2.1</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>

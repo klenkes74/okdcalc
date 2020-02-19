@@ -17,15 +17,14 @@
 
 package de.kaiserpfalzedv.okdcalc.calculator;
 
-import de.kaiserpfalzedv.okdcalc.facts.ClusterSizingResult;
+import de.kaiserpfalzedv.okdcalc.facts.LoggingSizingResult;
+import de.kaiserpfalzedv.okdcalc.facts._LoggingSizingRequest;
 import de.kaiserpfalzedv.okdcalc.facts._NodeDefinition;
-import de.kaiserpfalzedv.okdcalc.facts._Pod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,33 +34,27 @@ import java.util.Set;
  * @since 1.0.0 2020-02-16
  */
 @Dependent
-public class NodeTypeCalculator {
-    private static final Logger LOG = LoggerFactory.getLogger(NodeTypeCalculator.class);
+public class LoggingClusterSizeCalculator {
+    private static final Logger LOG = LoggerFactory.getLogger(LoggingClusterSizeCalculator.class);
 
     @Inject
-    NumbersOfPodsAndNodesCalculator calculator;
+    LoggingPodCalculator calculator;
 
-    public NodeTypeCalculator() {
-        calculator = new NumbersOfPodsAndNodesCalculator();
+    public LoggingClusterSizeCalculator() {
+        calculator = new LoggingPodCalculator();
     }
 
-    public NodeTypeCalculator(final NumbersOfPodsAndNodesCalculator calculator) {
+    public LoggingClusterSizeCalculator(final LoggingPodCalculator calculator) {
         this.calculator = calculator;
     }
 
-    public Set<ClusterSizingResult> scoreNodetypes(
-            final int totalNumberOfPods,
-            final _Pod defaultPod,
-            final Collection<_NodeDefinition> nodeDefintions
+    public Set<LoggingSizingResult> scoreNodetypes(
+            final _LoggingSizingRequest request
     ) {
-        HashSet<ClusterSizingResult> result = new HashSet<>(nodeDefintions.size());
+        HashSet<LoggingSizingResult> result = new HashSet<>(request.getPossibleInfraNodeTypes().size());
 
-        for (_NodeDefinition d : nodeDefintions) {
-            try {
-                result.add(calculator.calculateNumberOfPodsPerNodeAndNumberOfNodes(totalNumberOfPods, defaultPod, d));
-            } catch (NoSolutionException e) {
-                LOG.warn("No solution for: {}", d);
-            }
+        for (_NodeDefinition d : request.getPossibleInfraNodeTypes()) {
+            result.add(calculator.calculateLoggingSolution(d, request));
         }
 
         return result;
