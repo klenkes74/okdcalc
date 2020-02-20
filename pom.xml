@@ -14,15 +14,17 @@
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Foobar.  If not, see <http://www.gnu.org/licenses />.
+  ~ along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.kaiserpfalz-edv.okd</groupId>
     <artifactId>okdcalc</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>OKD-Calc - Performance and sizing calculator for OKD</name>
@@ -55,8 +57,7 @@
         <url>https://github.com/klenkes/okdcalc</url>
         <connection>scm:git:https://github.com/klenkes74/okdcalc.git</connection>
         <developerConnection>scm:git:ssh://github.com:klenkes74/okdcalc.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <issueManagement>
         <url>https://github.com/klenkes74/okdcalc/issues</url>
@@ -101,7 +102,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.okd</groupId>
                 <artifactId>okdcalc-service</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.kaiserpfalz-edv.okd</groupId>
@@ -111,7 +112,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.okd</groupId>
                 <artifactId>okdcalc-web</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
 
