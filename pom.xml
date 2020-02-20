@@ -22,7 +22,7 @@
 
     <groupId>de.kaiserpfalz-edv.okd</groupId>
     <artifactId>okdcalc</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>OKD-Calc - Performance and sizing calculator for OKD</name>
@@ -55,7 +55,7 @@
         <url>https://github.com/klenkes/okdcalc</url>
         <connection>scm:git:https://github.com/klenkes74/okdcalc.git</connection>
         <developerConnection>scm:git:ssh://github.com:klenkes74/okdcalc.git</developerConnection>
-      <tag>okdcalc-1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <issueManagement>
@@ -101,7 +101,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.okd</groupId>
                 <artifactId>okdcalc-service</artifactId>
-                <version>1.0.0</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.kaiserpfalz-edv.okd</groupId>
@@ -111,7 +111,7 @@
             <dependency>
                 <groupId>de.kaiserpfalz-edv.okd</groupId>
                 <artifactId>okdcalc-web</artifactId>
-                <version>1.0.0</version>
+                <version>1.1.0-SNAPSHOT</version>
             </dependency>
 
 
