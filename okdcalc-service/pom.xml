@@ -48,11 +48,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.kaiserpfalz-edv.okd</groupId>
-            <artifactId>okdcalc-rules</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
