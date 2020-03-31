@@ -46,7 +46,7 @@ An issue that is about a real bug is closed as soon as the fix is committed.
 ### Reporting Security Issues
 
 If you find a security issue, please act responsibly and report it not in the public issue tracker, but directly to us, so we can fix it before it can be exploited.
-Please send the related information to [Kaiserpfalz EDV-Service Support](mailto:support@kaiserpfalz-edv.de) using [PGP for e-mail encryption](https://global.sap.com/pc/security/keyblock.txt).
+Please send the related information to [Kaiserpfalz EDV-Service LoggingSizing](mailto:support@kaiserpfalz-edv.de) using [PGP for e-mail encryption](https://global.sap.com/pc/security/keyblock.txt).
 If we don't react within 2 business days, we accept public reporting without complaining about it.
 
 ### Usage of Labels
@@ -89,7 +89,7 @@ There are three important things to know:
 When you contribute (code, documentation, or anything else), you have to be aware that your contribution is covered by the 
 same [LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0.txt) that is applied to Office itself.
 If you want to contribute to parts not licensed on LGPL then you need to agree to the license given for that part of the 
-software. Please contact [Support](mailto:support@kaiserpfalz-edv.de) for this.
+software. Please contact [LoggingSizing](mailto:support@kaiserpfalz-edv.de) for this.
 In particular you need to agree to the Individual Contributor License Agreement,
 which can be [found here](https://gist.github.com/klenkes74/b76f623edb7830b4344ef2d5e373075e).
 (This applies to all contributors, including those contributing on behalf of a company). If you agree to its content, you 

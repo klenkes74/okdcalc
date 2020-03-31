@@ -8,7 +8,7 @@
 
 ## Reporting a Vulnerability
 
-Please report security vulnerabilities to our email address [Kaiserpfalz EDV-Service Support](mailto:support@kaiserpfalz-edv.de)
+Please report security vulnerabilities to our email address [Kaiserpfalz EDV-Service LoggingSizing](mailto:support@kaiserpfalz-edv.de)
 and give us two days to respond. We will get in contact with you and discuss the matter. After the two days we have no moral
 rights to complain about too early disclosure.
 
