@@ -54,7 +54,7 @@ public class LoggingPodCalculator {
     /**
      * The maximum number of active primary shards in one logging cluster.
      */
-    private static final int MAX_ACTIVE_SHARDS = 5000;
+    private static final int MAX_ACTIVE_SHARDS = 100000;
 
     /**
      * 3600 seconds per hour * 24 hours per day.
